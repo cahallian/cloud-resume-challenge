@@ -1,46 +1,45 @@
 name: main
 on: push
-
+env:
+  PYTHON_VERSION: 3.8
+  AWS_DEFAULT_REGION: 'us-east-1'
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
-  cypress-test:
-    name: Cypress test
+  test-infra:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: run cypress tests with chrome
-        uses: cypress-io/github-action@v2
-        with:
-          browser: chrome
-
-  deploy-infra:
-      needs: cypress-test
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - uses: actions/setup-python@v2
-          with:
-            python-version: '3.9'
-            architecture: 'x64'
-        - uses: aws-actions/setup-sam@v1
-        - uses: aws-actions/configure-aws-credentials@v1
-          with:
-            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws-region: us-east-1
-        - run: sam build
-        - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
-  
-  deploy-site:
-    needs: deploy-infra
-    runs-on: ubuntu-latest         
+    timeout-minutes: 2
     steps:
       - uses: actions/checkout@v2
-      - uses: aws-actions/configure-aws-credentials@v1
+      - uses: actions/setup-python@v2.2.2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Deploy site because jakejarvis doesn't work
-        run: aws s3 sync ./resume-site s3://crc-version-2
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install boto3
+        run:
+          pip3 install boto3
+      - name: test get-function
+        run: cd getFunction && python3 test.py -v && cd ..
+      - name: test put-function
+        run: cd putFunction && python3 test.py -v && cd ..
+
+  build-and-deploy-infra:
+    needs: test-infra
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: aws-actions/setup-sam@v1
+      - run: sam build
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
+
+  deploy-site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --delete
+        env:
+          AWS_S3_BUCKET: ian-cahall-cloud-website
+          SOURCE_DIR: resumeHTML
