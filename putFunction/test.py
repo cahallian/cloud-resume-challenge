@@ -1,5 +1,6 @@
 import unittest
 import boto3
+import simplejson
 
 from app import lambda_handler
 
