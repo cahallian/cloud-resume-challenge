@@ -35,6 +35,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: Deploy site because jakejarvis doesn't work
-        run: aws s3 sync ./resume-site s3://crc-version-2  
+      - name: Deploy site
+        run: aws s3 sync ./resume-site s3://ian-cahall-cloud-website
 
