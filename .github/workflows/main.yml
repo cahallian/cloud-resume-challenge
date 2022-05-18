@@ -8,6 +8,23 @@ env:
 
 jobs:
 
+  test-app:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps: 
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2.2.2
+        with:
+          python-version: ${{env.PYTHON_VERSION }}
+      - name: install boto3
+        run: pip install boto3
+      - name: install simplejson
+        run: pip install simplejson
+      - name: Test Get Function
+        run: cd getFunction && python test.py -v && cd ..
+      - name: Test Put Function
+        run: cd putFunction && python test.py -v && cd ..
+
   deploy-infra:
       runs-on: ubuntu-latest
       steps:
