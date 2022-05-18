@@ -6,23 +6,35 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-
-
 jobs:
-  test-apps:
-    runs-on: ubuntu-latest
-    timeout-minutes: 2
+
+  deploy-infra:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-python@v2
+          with:
+            python-version: '3.9'
+            architecture: 'x86_64'
+        - uses: aws-actions/setup-sam@v1
+        - uses: aws-actions/configure-aws-credentials@v1
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: us-east-1
+        - run: sam build
+        - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
+
+  deploy-site:
+    needs: deploy-infra
+    runs-on: ubuntu-latest         
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2.2.2
+      - uses: aws-actions/configure-aws-credentials@v1
         with:
-          python-version: 3.9
-      - name: Install boto3
-        run:
-          pip3 install boto3
-      - name: Install simplejson
-        run: pip install simplejson
-      - name: test get-function
-        run: cd getFunction && python3 test.py -v && cd ..
-      - name: test put-function
-        run: cd putFunction && python3 test.py -v && cd ..
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Deploy site because jakejarvis doesn't work
+        run: aws s3 sync ./resume-site s3://crc-version-2  
+
