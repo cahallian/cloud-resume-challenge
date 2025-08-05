@@ -78,7 +78,7 @@ Resources:
 
 #Create Get Lambda Function that pulls visitor count from my DynamoDB
   GetFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function 
     Properties:
       Policies:
         - DynamoDBCrudPolicy:
@@ -90,14 +90,14 @@ Resources:
         - x86_64
       Events:
         GetFunction:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api 
           Properties:
             Path: /get
             Method: get
 
 #Create Put Function that increases viewer count on refresh and stores new number in my DynamoDB Table
   PutFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function 
     Properties:
       Policies:
         - DynamoDBCrudPolicy:
@@ -164,14 +164,20 @@ Resources:
         GuestbookApi:
           Type: Api
           Properties:
+            RestApiId: !Ref MyApi
             Path: /guestbook
             Method: post
-            Cors:
-              AllowMethods: "'POST,OPTIONS'"
-              AllowHeaders: "'Content-Type'"
-              AllowOrigin: "'https://ian-cahall-resume.com'"
+
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowMethods: "'POST,OPTIONS'"
+        AllowHeaders: "'Content-Type'"
+        AllowOrigin: "'https://ian-cahall-resume.com'"
 
 Outputs:
   GuestbookApiUrl:
     Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/guestbook"
+    Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/guestbook"
