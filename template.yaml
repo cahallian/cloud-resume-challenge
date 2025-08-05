@@ -10,7 +10,7 @@ Parameters:
 
 Globals:
   Function:
-    Timeout: 10  # or higher if needed
+    Timeout: 30  # or higher if needed
 
 #Establish publicly viewable S3 bucket and point to Index.html as Index doc
 Resources:
