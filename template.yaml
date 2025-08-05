@@ -178,9 +178,8 @@ Resources:
       Cors:
         AllowMethods: "'POST,OPTIONS'"
         AllowHeaders: "'Content-Type'"
-        AllowOrigin: "'*'"
-
-Outputs:
-  ApiUrl:
-    Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${GuestbookApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/guestbook"
+        AllowOrigin: "'*'"  
+    Outputs:
+      ApiUrl:
+        Description: "API Gateway endpoint URL"
+        Value: !Sub "https://${GuestbookApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/guestbook"
