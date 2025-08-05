@@ -109,7 +109,7 @@ Resources:
         - x86_64
       Events:
         PutFunction:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api
           Properties:
             Path: /put
             Method: get
@@ -166,8 +166,8 @@ Resources:
           Properties:
             Path: /guestbook
             Method: post
+            RestApiId: !Ref ServerlessRestApi 
 
-# Outputs should be at the root level, like this:
 Outputs:
   GuestbookApiUrl:
     Description: "API Gateway endpoint URL"

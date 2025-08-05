@@ -7,6 +7,18 @@ dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table(os.environ['TABLE_NAME'])
 
 def lambda_handler(event, context):
+    # Handle preflight CORS
+    if event.get('httpMethod', '') == 'OPTIONS':
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': 'https://ian-cahall-resume.com',
+                'Access-Control-Allow-Methods': 'POST,OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type'
+            },
+            'body': json.dumps({'message': 'CORS preflight'})
+        }
+
     body = json.loads(event['body'])
     name = body.get('name', '')
     role = body.get('role', '')
