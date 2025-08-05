@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (guestBookStep === 2) {
                 let role = text;
                 // Send to backend
-                fetch('https://YOUR_BACKEND_API/guestbook', {
+                fetch('https://u2l5m8yrz4.execute-api.us-east-1.amazonaws.com/Prod/guestbook', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 guestBookStep = -1;
             } else {
-                // Optionally, send to LLM for general Q&A
+                // Send to LLM for general Q&A
                 fetch('https://YOUR_BACKEND_API/chat', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
