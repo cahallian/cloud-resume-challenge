@@ -143,9 +143,6 @@ Resources:
           AttributeType: S
       KeySchema:
         - AttributeName: id
-          AttributeType: S
-      KeySchema:
-        - AttributeName: id
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
 
@@ -169,7 +166,6 @@ Resources:
           Properties:
             Path: /guestbook
             Method: post
-            RestApiId: !Ref MyApi # Optional, if you define a separate API resource
 
 # Outputs should be at the root level, like this:
 Outputs:
