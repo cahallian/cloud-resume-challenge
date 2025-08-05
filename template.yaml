@@ -169,17 +169,10 @@ Resources:
           Properties:
             Path: /guestbook
             Method: post
+            RestApiId: !Ref MyApi # Optional, if you define a separate API resource
 
-#Create API Gateway for Guestbook Function with CORS enabled
-  GuestbookApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: Prod
-      Cors:
-        AllowMethods: "'POST,OPTIONS'"
-        AllowHeaders: "'Content-Type'"
-        AllowOrigin: "'*'"  
-    Outputs:
-      ApiUrl:
-        Description: "API Gateway endpoint URL"
-        Value: !Sub "https://${GuestbookApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/guestbook"
+# Outputs should be at the root level, like this:
+Outputs:
+  GuestbookApiUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/guestbook"
