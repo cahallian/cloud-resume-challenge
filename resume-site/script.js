@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }).then(() => {
                     addBotMessage("You're on the guest book! 🎉 Thank you for visiting.");
                 }).catch(() => {
-                    addBotMessage("Sorry, there was a problem saving your info.");
+                    addBotMessage("Sorry, the Guest Book is currently unavailable. Your information was not stored.");
                 });
                 guestBookStep = -1;
             } else {
