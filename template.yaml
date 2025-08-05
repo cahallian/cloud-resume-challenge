@@ -132,3 +132,55 @@ Resources:
                 - !Ref MyWebsite
                 - /*
       Bucket: !Ref MyWebsite
+
+#Create Guestbook Table to store guestbook entries
+  GuestbookTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: GuestbookEntries
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+
+#Create Guestbook Function to handle guestbook submissions
+  GuestbookFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GuestbookHandler
+      Runtime: python3.12
+      Handler: app.lambda_handler
+      CodeUri: guestbook/
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref GuestbookTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref GuestbookTable
+      Events:
+        GuestbookApi:
+          Type: Api
+          Properties:
+            Path: /guestbook
+            Method: post
+
+#Create API Gateway for Guestbook Function with CORS enabled
+  GuestbookApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowMethods: "'POST,OPTIONS'"
+        AllowHeaders: "'Content-Type'"
+        AllowOrigin: "'*'"
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${GuestbookApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/guestbook"
