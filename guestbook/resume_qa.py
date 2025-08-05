@@ -38,6 +38,7 @@ def lambda_handler(event, context):
             'body': json.dumps({'reply': reply})
         }
     except Exception as e:
+        print(f"Error in resume_qa lambda: {e}")  # This will show up in CloudWatch Logs
         return {
             'statusCode': 500,
             'headers': {
@@ -45,5 +46,5 @@ def lambda_handler(event, context):
                 'Access-Control-Allow-Methods': 'POST,OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type'
             },
-            'body': json.dumps({'reply': "Sorry, I couldn't process that."})
+            'body': json.dumps({'reply': "Sorry, LLM world is on fire."})
         }

@@ -172,14 +172,6 @@ Resources:
             Path: /guestbook
             Method: post
 
-  MyApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: Prod
-      Cors:
-        AllowMethods: "'POST,OPTIONS'"
-        AllowHeaders: "'Content-Type'"
-        AllowOrigin: "'https://ian-cahall-resume.com'"
 
 #Create Resume QA Function to handle resume QA submissions
   ResumeQAFunction:
@@ -202,7 +194,14 @@ Resources:
             Path: /resume-qa
             Method: post
 
-
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowMethods: "'POST,OPTIONS'"
+        AllowHeaders: "'Content-Type'"
+        AllowOrigin: "'https://ian-cahall-resume.com'"
 
 Outputs:
   GuestbookApiUrl:
