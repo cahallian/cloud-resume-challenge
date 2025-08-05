@@ -22,14 +22,30 @@ document.addEventListener('DOMContentLoaded', function() {
         let greeted = false;
         let guestBookStep = 0;
     
+        function addBotMessagesWithDelay(messagesArray, delayMs = 5000) {
+            let i = 0;
+            function sendNext() {
+                if (i < messagesArray.length) {
+                    addBotMessage(messagesArray[i]);
+                    i++;
+                    if (i < messagesArray.length) {
+                        setTimeout(sendNext, delayMs);
+                    }
+                }
+            }
+            sendNext();
+        }
+    
         // Wait for visitor counter to load
         function checkVisitorCount() {
             const countElem = document.getElementById('visitorCount');
             if (countElem && countElem.textContent !== 'loading...') {
                 visitorNumber = countElem.textContent.trim();
                 if (!greeted) {
-                    addBotMessage("👋 Hi! I'm Ian's Guest Greeter bot. I use a combination of deterministic code and non-deterministic LLM injection in my responses.");
-                    addBotMessage(`You are guest #${visitorNumber}. Would you like to be added to the Guest Book? (yes/no)`);
+                    addBotMessagesWithDelay([
+                        "👋 Hi! I'm Ian's Guest Greeter bot. I use a combination of deterministic code and non-deterministic LLM injection in my responses.",
+                        `You are guest #${visitorNumber}. Would you like to be added to the Guest Book? (yes/no)`
+                    ]);
                     greeted = true;
                 }
             } else {
