@@ -108,14 +108,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         visitorNumber: visitorNumber
                     })
                 }).then(() => {
-                    addBotMessage("You're on the guest book! 🎉 Thank you for visiting.");
+                    addBotMessage("You're on the guest book! 🎉 If you have any basic questions about Ian's resume, let me know! Otherwise, thanks for visiting!");
                 }).catch(() => {
-                    addBotMessage("Sorry, the Guest Book is currently unavailable. Your information was not stored.");
+                    addBotMessage("Sorry, the Guest Book is currently unavailable. Your information was not stored. Please let me know if you have any questions about Ian's resume.");
                 });
                 guestBookStep = -1;
             } else {
                 // Send to LLM for general Q&A
-                fetch('https://YOUR_BACKEND_API/chat', {
+                fetch('https://wjmntc38ga.execute-api.us-east-1.amazonaws.com/Prod/resume-qa', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({message: text})
