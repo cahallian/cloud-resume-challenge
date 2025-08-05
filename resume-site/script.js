@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (countElem && countElem.textContent !== 'loading...') {
                 visitorNumber = countElem.textContent.trim();
                 if (!greeted) {
-                    addBotMessage(`👋 Hello! Welcome to Ian's Resume. You are visitor #${visitorNumber}. Would you like to be added to the Guest Book? (yes/no)`);
+                    addBotMessage(`👋 Hello! Welcome to Ian's Resume. You are guest #${visitorNumber}. Would you like to be added to the Guest Book? (yes/no)`);
                     greeted = true;
                 }
             } else {
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!text) return;
             addUserMessage(text);
             input.value = '';
-    
+
             // Guest Book logic
             if (guestBookStep === 0) {
                 if (/^y(es)?$/i.test(text)) {
@@ -75,19 +75,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     guestBookStep = -1;
                 }
             } else if (guestBookStep === 1) {
-                // Save name, ask for email (optional)
+                // Save name, ask for role/title
                 window.guestName = text;
-                addBotMessage("Thanks! Would you like to leave your email too? (optional, or type 'skip')");
+                addBotMessage("Thanks! What is your current role or title?");
                 guestBookStep = 2;
             } else if (guestBookStep === 2) {
-                let email = text.toLowerCase() === 'skip' ? '' : text;
+                let role = text;
                 // Send to backend
                 fetch('https://YOUR_BACKEND_API/guestbook', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
                         name: window.guestName,
-                        email: email,
+                        role: role,
                         visitorNumber: visitorNumber
                     })
                 }).then(() => {
