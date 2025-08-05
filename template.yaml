@@ -166,7 +166,10 @@ Resources:
           Properties:
             Path: /guestbook
             Method: post
-            RestApiId: !Ref ServerlessRestApi 
+            Cors:
+              AllowMethods: "'POST,OPTIONS'"
+              AllowHeaders: "'Content-Type'"
+              AllowOrigin: "'https://ian-cahall-resume.com'"
 
 Outputs:
   GuestbookApiUrl:

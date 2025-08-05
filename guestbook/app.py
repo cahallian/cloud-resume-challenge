@@ -6,16 +6,18 @@ import boto3
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table(os.environ['TABLE_NAME'])
 
+CORS_HEADERS = {
+    'Access-Control-Allow-Origin': 'https://ian-cahall-resume.com',
+    'Access-Control-Allow-Methods': 'POST,OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type'
+}
+
 def lambda_handler(event, context):
     # Handle preflight CORS
     if event.get('httpMethod', '') == 'OPTIONS':
         return {
             'statusCode': 200,
-            'headers': {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': '*',
-                'Access-Control-Allow-Headers': '*'
-            },
+            'headers': CORS_HEADERS,
             'body': json.dumps({'message': 'CORS preflight'})
         }
 
@@ -26,25 +28,25 @@ def lambda_handler(event, context):
     if not name:
         return {
             'statusCode': 400,
-            'headers': {'Access-Control-Allow-Origin': '*'},
+            'headers': CORS_HEADERS,
             'body': json.dumps({'message': 'Name is required.'})
         }
     if not role:
         return {
             'statusCode': 400,
-            'headers': {'Access-Control-Allow-Origin': '*'},
+            'headers': CORS_HEADERS,
             'body': json.dumps({'message': 'Role is required.'})
         }
     if len(name) > 25:
         return {
             'statusCode': 400,
-            'headers': {'Access-Control-Allow-Origin': '*'},
+            'headers': CORS_HEADERS,
             'body': json.dumps({'message': 'Name must be 25 characters or fewer.'})
         }
     if len(role) > 25:
         return {
             'statusCode': 400,
-            'headers': {'Access-Control-Allow-Origin': '*'},
+            'headers': CORS_HEADERS,
             'body': json.dumps({'message': 'Role must be 25 characters or fewer.'})
         }
 
@@ -55,7 +57,7 @@ def lambda_handler(event, context):
     if response['Items']:
         return {
             'statusCode': 409,
-            'headers': {'Access-Control-Allow-Origin': '*'},
+            'headers': CORS_HEADERS,
             'body': json.dumps({'message': 'Duplicate entry: this name and role already exist.'})
         }
 
@@ -68,6 +70,6 @@ def lambda_handler(event, context):
     table.put_item(Item=entry)
     return {
         'statusCode': 200,
-        'headers': {'Access-Control-Allow-Origin': '*'},
+        'headers': CORS_HEADERS,
         'body': json.dumps({'message': 'Guestbook entry added'})
     }
