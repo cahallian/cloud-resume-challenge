@@ -5,6 +5,7 @@ env:
   AWS_DEFAULT_REGION: 'us-east-1'
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
 jobs:
 
@@ -38,9 +39,10 @@ jobs:
           with:
             aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            openai-api-key: ${{ secrets.OPENAI_API_KEY }}
             aws-region: us-east-1
         - run: sam build
-        - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
+        - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --parameter-overrides OpenAIApiKey=${{ secrets.OPENAI_API_KEY }}
 
   deploy-site:
     needs: deploy-infra

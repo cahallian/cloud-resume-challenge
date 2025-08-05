@@ -177,6 +177,32 @@ Resources:
         AllowHeaders: "'Content-Type'"
         AllowOrigin: "'https://ian-cahall-resume.com'"
 
+#Create Resume QA Function to handle resume QA submissions
+  ResumeQAFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ResumeQAHandler
+      Runtime: python3.12
+      Handler: resume_qa.lambda_handler
+      CodeUri: guestbook/
+      Environment:
+        Variables:
+          OPENAI_API_KEY: !Ref OpenAIApiKey
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Events:
+        ResumeQAApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /resume-qa
+            Method: post
+
+Parameters:
+  OpenAIApiKey:
+    Type: String
+    Description: "OpenAI API Key"
+
 Outputs:
   GuestbookApiUrl:
     Description: "API Gateway endpoint URL"
