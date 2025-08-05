@@ -2,7 +2,7 @@ import os
 import json
 import openai
 
-openai.api_key = os.environ['OPENAI_API_KEY']
+client = openai.OpenAI(api_key=os.environ['OPENAI_API_KEY'])
 
 SYSTEM_PROMPT = (
     "You are a helpful assistant for Ian Cahall's resume website, https://ian-cahall-resume.com. "
@@ -18,7 +18,7 @@ def lambda_handler(event, context):
         body = json.loads(event['body'])
         user_message = body.get('message', '')
 
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
@@ -27,7 +27,7 @@ def lambda_handler(event, context):
             max_tokens=300,
             temperature=0.2
         )
-        reply = response['choices'][0]['message']['content']
+        reply = response.choices[0].message.content
         return {
             'statusCode': 200,
             'headers': {
@@ -38,7 +38,7 @@ def lambda_handler(event, context):
             'body': json.dumps({'reply': reply})
         }
     except Exception as e:
-        print(f"Error in resume_qa lambda: {e}")  # This will show up in CloudWatch Logs
+        print(f"Error in resume_qa lambda: {e}")
         return {
             'statusCode': 500,
             'headers': {
