@@ -28,7 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (countElem && countElem.textContent !== 'loading...') {
                 visitorNumber = countElem.textContent.trim();
                 if (!greeted) {
-                    addBotMessage(`👋 Hello! Welcome to Ian's Resume. You are guest #${visitorNumber}. Would you like to be added to the Guest Book? (yes/no)`);
+                    addBotMessage("👋 Hi! I'm Ian's Guest Greeter bot. I use a combination of deterministic code and non-deterministic LLM injection in my responses.");
+                    addBotMessage(`You are guest #${visitorNumber}. Would you like to be added to the Guest Book? (yes/no)`);
                     greeted = true;
                 }
             } else {
