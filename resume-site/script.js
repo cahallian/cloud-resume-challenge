@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         function addBotMessage(text) {
             const msg = document.createElement('div');
             msg.style.margin = '10px 0';
-            msg.innerHTML = `<b>Bot:</b> ${text}`;
+            msg.innerHTML = `<b>Greeter:</b> ${text}`;
             messages.appendChild(msg);
             messages.scrollTop = messages.scrollHeight;
         }
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Guest Book logic
             if (guestBookStep === 0) {
                 if (/^y(es)?$/i.test(text)) {
-                    addBotMessage("Great! What's your name?");
+                    addBotMessage("Great! What's your name? First name and last initial is fine.");
                     guestBookStep = 1;
                 } else {
                     addBotMessage("No problem! Let me know if you have any questions about Ian's resume.");

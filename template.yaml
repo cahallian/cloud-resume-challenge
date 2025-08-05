@@ -85,7 +85,7 @@ Resources:
             TableName: visitors
       CodeUri: getFunction/
       Handler: app.lambda_handler
-      Runtime: python3.9
+      Runtime: python3.12
       Architectures:
         - x86_64
       Events:
@@ -104,7 +104,7 @@ Resources:
             TableName: visitors
       CodeUri: putFunction/
       Handler: app.lambda_handler
-      Runtime: python3.9
+      Runtime: python3.12
       Architectures:
         - x86_64
       Events:
