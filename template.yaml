@@ -3,10 +3,14 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   Build Template for Cloud Resume Challenge by Ian Cahall
 
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Parameters:
+  OpenAIApiKey:
+    Type: String
+    Description: "OpenAI API Key"
+
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 10  # or higher if needed
 
 #Establish publicly viewable S3 bucket and point to Index.html as Index doc
 Resources:
@@ -198,12 +202,12 @@ Resources:
             Path: /resume-qa
             Method: post
 
-Parameters:
-  OpenAIApiKey:
-    Type: String
-    Description: "OpenAI API Key"
+
 
 Outputs:
   GuestbookApiUrl:
     Description: "API Gateway endpoint URL"
     Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/guestbook"
+  ResumeQAApiUrl:
+    Description: "Resume QA API Gateway endpoint URL"
+    Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/resume-qa"
